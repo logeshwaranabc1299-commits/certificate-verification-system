@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Certificate Verification System</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            Blockchain Certificate Verification
+        </div>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/login">Admin Login</a>
+            <a href="/verify">Verify Certificate</a>
+        </nav>
+    </header>
+
+    <main class="hero">
+
+        <div class="hero-content">
+
+            <h1>
+                Blockchain-Based Academic Certificate Verification System
+            </h1>
+
+            <p>
+                A secure and reliable platform for issuing and verifying
+                academic certificates using SHA-256 hashing and blockchain
+                technology.
+            </p>
+
+            <div class="button-group">
+
+                <a href="/verify" class="btn primary-btn">
+                    Verify Certificate
+                </a>
+
+                <a href="/login" class="btn secondary-btn">
+                    Admin Login
+                </a>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <section class="features">
+
+        <div class="feature-card">
+            <h2>Secure</h2>
+            <p>
+                Certificate hashes are securely stored in a blockchain-style
+                ledger.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <h2>Fast Verification</h2>
+            <p>
+                Employers can verify certificate authenticity within seconds.
+            </p>
+        </div>
+
+        <div class="feature-card">
+            <h2>Tamper Detection</h2>
+            <p>
+                Any modification to the certificate produces a different
+                SHA-256 hash.
+            </p>
+        </div>
+
+    </section>
+
+    <footer>
+        <p>
+            Blockchain Academic Certificate Verification System
+        </p>
+    </footer>
+
+</body>
+</html>

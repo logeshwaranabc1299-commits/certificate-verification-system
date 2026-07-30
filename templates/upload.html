@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Issue Certificate</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        Issue Academic Certificate
+    </div>
+
+    <nav>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+</header>
+
+<main class="form-section">
+
+    <div class="form-card wide-form">
+
+        <h1>Issue Certificate</h1>
+
+        <p>
+            Enter the academic certificate details and upload the certificate.
+        </p>
+
+        {% if message %}
+            <div class="success-message">
+                {{ message }}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+
+            <div class="form-grid">
+
+                <div>
+                    <label for="certificate_id">
+                        Certificate ID
+                    </label>
+
+                    <input
+                        type="text"
+                        id="certificate_id"
+                        name="certificate_id"
+                        placeholder="Example: KIOT-MECH-2026-001"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="student_name">
+                        Student Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="student_name"
+                        name="student_name"
+                        placeholder="Enter student name"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="register_number">
+                        Register Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="register_number"
+                        name="register_number"
+                        placeholder="Enter register number"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="course">
+                        Course
+                    </label>
+
+                    <input
+                        type="text"
+                        id="course"
+                        name="course"
+                        placeholder="Example: B.E. Mechanical Engineering"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="institution">
+                        Institution
+                    </label>
+
+                    <input
+                        type="text"
+                        id="institution"
+                        name="institution"
+                        placeholder="Enter institution name"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="issue_date">
+                        Issue Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="issue_date"
+                        name="issue_date"
+                        required
+                    >
+                </div>
+
+            </div>
+
+            <label for="certificate_file">
+                Certificate File
+            </label>
+
+            <input
+                type="file"
+                id="certificate_file"
+                name="certificate_file"
+                accept=".pdf,.png,.jpg,.jpeg"
+                required
+            >
+
+            <button
+                type="submit"
+                class="btn primary-btn full-width"
+            >
+                Issue Certificate
+            </button>
+
+        </form>
+
+    </div>
+
+</main>
+
+</body>
+</html>

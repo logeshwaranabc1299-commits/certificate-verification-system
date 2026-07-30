@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Blockchain Explorer</title>
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}"
+>
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+<div class="logo">
+Blockchain Explorer
+</div>
+
+<nav>
+
+<a href="/dashboard">
+Dashboard
+</a>
+
+<a href="/logout">
+Logout
+</a>
+
+</nav>
+
+</header>
+
+<div class="blockchain-section">
+
+<h1>Academic Certificate Blockchain</h1>
+
+{% if chain_valid %}
+
+<div class="success-message">
+
+Blockchain Integrity Verified
+
+</div>
+
+{% else %}
+
+<div class="error-message">
+
+Blockchain Integrity Failed
+
+</div>
+
+{% endif %}
+
+<div class="chain-container">
+
+{% for certificate in certificates %}
+
+<div class="block-card">
+
+<h2>
+
+Block #{{ certificate["id"] }}
+
+</h2>
+
+<p>
+
+<strong>Certificate ID :</strong>
+
+{{ certificate["certificate_id"] }}
+
+</p>
+
+<p>
+
+<strong>Student :</strong>
+
+{{ certificate["student_name"] }}
+
+</p>
+
+<p>
+
+<strong>Register No :</strong>
+
+{{ certificate["register_number"] }}
+
+</p>
+
+<p>
+
+<strong>Course :</strong>
+
+{{ certificate["course"] }}
+
+</p>
+<p>
+    <strong>Certificate Status:</strong>
+
+    {% if certificate["status"] == "REVOKED" %}
+
+        <span class="status-revoked">
+            REVOKED
+        </span>
+
+    {% else %}
+
+        <span class="status-valid">
+            VALID
+        </span>
+
+    {% endif %}
+</p>
+{% if certificate["revoked_at"] %}
+
+    <p>
+        <strong>Revoked At:</strong>
+        {{ certificate["revoked_at"] }}
+    </p>
+
+{% endif %}
+<p>
+
+<strong>Previous Hash :</strong>
+
+<br>
+
+{{ certificate["previous_hash"] }}
+
+</p>
+
+<p>
+
+<strong>Block Hash :</strong>
+
+<br>
+
+{{ certificate["block_hash"] }}
+
+</p>
+
+<p>
+
+<strong>Created :</strong>
+
+{{ certificate["created_at"] }}
+
+</p>
+
+</div>
+
+{% if not loop.last %}
+
+<div class="arrow">
+
+↓
+
+</div>
+
+{% endif %}
+
+{% endfor %}
+
+</div>
+
+</div>
+
+</body>
+
+</html>

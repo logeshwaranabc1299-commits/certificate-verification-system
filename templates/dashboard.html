@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">Admin Dashboard</div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/logout">Logout</a>
+    </nav>
+
+</header>
+
+<main class="dashboard-section">
+
+    <h1>Welcome, Administrator</h1>
+
+    <p class="dashboard-description">
+        Manage academic certificates and blockchain records.
+    </p>
+
+    <div class="dashboard-grid">
+
+        <a href="/upload" class="dashboard-card">
+            <h2>Issue Certificate</h2>
+            <p>Add student and certificate details.</p>
+        </a>
+
+        <a href="/verify" class="dashboard-card">
+            <h2>Verify Certificate</h2>
+            <p>Check whether a certificate is valid.</p>
+        </a>
+
+        <a href="/blockchain" class="dashboard-card">
+            <h2>View Blockchain</h2>
+            <p>View certificate records stored in the chain.</p>
+        </a>
+        <a href="/certificates" class="dashboard-card">
+    <h2>Manage Certificates</h2>
+    <p>View and delete issued certificate records.</p>
+</a>
+
+    </div>
+
+</main>
+
+</body>
+</html>

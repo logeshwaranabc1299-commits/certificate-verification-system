@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">Certificate Verification System</div>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/verify">Verify Certificate</a>
+    </nav>
+</header>
+
+<main class="form-section">
+
+    <div class="form-card">
+
+        <h1>Admin Login</h1>
+
+        <p>Enter the administrator username and password.</p>
+
+        {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+        {% endif %}
+
+        <form method="POST">
+
+            <label for="username">Username</label>
+
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter username"
+                required
+            >
+
+            <label for="password">Password</label>
+
+            <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter password"
+                required
+            >
+
+            <button type="submit" class="btn primary-btn full-width">
+                Login
+            </button>
+
+        </form>
+
+        <div class="login-details">
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>
