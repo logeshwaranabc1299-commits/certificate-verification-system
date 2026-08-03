@@ -22,7 +22,6 @@
         <nav>
             <a href="/">Home</a>
             <a href="/login">Admin Login</a>
-            <a href="/verify">Verify Certificate</a>
         </nav>
     </header>
 
@@ -42,44 +41,15 @@
 
             <div class="button-group">
 
-                <a href="/verify" class="btn primary-btn">
-                    Verify Certificate
-                </a>
-
-                <a href="/login" class="btn secondary-btn">
-                    Admin Login
-                </a>
+            <a href="{{ url_for('login') }}"
+                >Admin Login
+            </a>
 
             </div>
 
         </div>
 
     </main>
-
-    <section class="features">
-
-        <div class="feature-card">
-            <h2>Secure</h2>
-            <p>
-                Certificate hashes are securely stored in a blockchain-style
-                ledger.
-            </p>
-        </div>
-
-        <div class="feature-card">
-            <h2>Fast Verification</h2>
-            <p>
-                Employers can verify certificate authenticity within seconds.
-            </p>
-        </div>
-
-        <div class="feature-card">
-            <h2>Tamper Detection</h2>
-            <p>
-                Any modification to the certificate produces a different
-                SHA-256 hash.
-            </p>
-        </div>
 
     </section>
 

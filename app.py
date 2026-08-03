@@ -24,7 +24,9 @@ from database import (
     get_all_certificates,
     verify_blockchain_integrity,
     search_certificates,
-    delete_certificate
+    delete_certificate,
+    login_admin,
+    get_admin_certificates
 )
 
 
@@ -60,30 +62,38 @@ def allowed_file(filename):
 def home():
     return render_template("index.html")
 
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
+
     error = None
 
     if request.method == "POST":
+
         username = request.form.get("username", "").strip()
         password = request.form.get("password", "")
 
-        if username == "admin" and password == "admin123":
-            session["admin"] = username
+        admin = login_admin(username, password)
+
+        if admin:
+            session["admin"] = admin["username"]
+            session["admin_id"] = admin["admin_id"]
+            session["college_name"] = admin["college_name"]
+
             return redirect(url_for("dashboard"))
 
         error = "Invalid username or password."
 
     return render_template("login.html", error=error)
 
-
 @app.route("/dashboard")
 def dashboard():
     if "admin" not in session:
         return redirect(url_for("login"))
 
-    return render_template("dashboard.html")
+    return render_template(
+    "dashboard.html",
+    college=session.get("college_name")
+)
 
 
 @app.route("/upload", methods=["GET", "POST"])
@@ -164,7 +174,7 @@ def upload_certificate():
 
             try:
                 certificate_file.save(file_path)
-
+                admin_id = session["admin_id"]
                 certificate_hash = generate_file_hash(
                     file_path
                 )
@@ -174,6 +184,7 @@ def upload_certificate():
                 )
 
                 insert_certificate(
+                    session["admin_id"],
                     certificate_id,
                     student_name,
                     register_number,
@@ -228,101 +239,42 @@ def upload_certificate():
 
 @app.route("/verify", methods=["GET", "POST"])
 def verify():
+
     if request.method == "POST":
+
         certificate_id = request.form.get(
             "certificate_id", ""
         ).strip()
 
-        uploaded_file = request.files.get(
-            "certificate_file"
-        )
-
-        if not certificate_id:
-            return render_template(
-                "result.html",
-                status="error",
-                message="Please enter a certificate ID."
-            )
-
-        certificate = get_certificate_by_id(
-            certificate_id
-        )
+        certificate = get_certificate_by_id(certificate_id)
 
         if certificate is None:
+
             return render_template(
                 "result.html",
                 status="invalid",
-                message="Certificate record not found."
-            )
-
-        if (
-            uploaded_file is None
-            or uploaded_file.filename == ""
-        ):
-            return render_template(
-                "result.html",
-                status="error",
-                message="Please upload a certificate file."
-            )
-
-        if not allowed_file(uploaded_file.filename):
-            return render_template(
-                "result.html",
-                status="error",
-                message=(
-                    "Only PDF, PNG, JPG and JPEG "
-                    "files are allowed."
-                )
-            )
-
-        safe_filename = secure_filename(
-            uploaded_file.filename
-        )
-
-        unique_name = (
-            f"temporary_{uuid.uuid4().hex}_{safe_filename}"
-        )
-
-        temporary_path = os.path.join(
-            app.config["UPLOAD_FOLDER"],
-            unique_name
-        )
-
-        try:
-            uploaded_file.save(temporary_path)
-
-            uploaded_hash = generate_file_hash(
-                temporary_path
-            )
-
-        finally:
-            if os.path.exists(temporary_path):
-                os.remove(temporary_path)
-
-        if uploaded_hash == certificate["certificate_hash"]:
-            return render_template(
-                "result.html",
-                status="valid",
-                message="Certificate verified successfully.",
-                certificate=certificate
+                message="Certificate not found."
             )
 
         return render_template(
             "result.html",
-            status="invalid",
-            message=(
-                "Certificate is modified, fake or "
-                "does not match the stored record."
-            )
+            status="valid",
+            certificate=certificate
         )
 
-    certificate_id = request.args.get("id", "")
+    return render_template("verify.html")
+@app.route("/certificate/<certificate_id>")
+def certificate_details(certificate_id):
+
+    certificate = get_certificate_by_id(certificate_id)
+
+    if certificate is None:
+        return "Certificate not found"
 
     return render_template(
-        "verify.html",
-        certificate_id=certificate_id
+        "certificate_details.html",
+        certificate=certificate
     )
-
 
 @app.route("/blockchain")
 def blockchain_records():
@@ -355,8 +307,7 @@ def certificate_list():
 
     else:
 
-        certificates=get_all_certificates()
-
+        certificates = get_admin_certificates(session["admin_id"])
     return render_template(
 
     "certificates.html",

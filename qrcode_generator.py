@@ -1,7 +1,6 @@
 import qrcode
 import os
 
-
 def generate_qr_code(certificate_id):
 
     os.makedirs("qrcodes", exist_ok=True)
@@ -12,14 +11,16 @@ def generate_qr_code(certificate_id):
         border=5
     )
 
-    verification_url = f"http://127.0.0.1:5000/verify?id={certificate_id}"
+    verification_url = f"http://10.226.194.163:5000/certificate/{certificate_id}"
 
     qr.add_data(verification_url)
 
     qr.make(fit=True)
 
-    image = qr.make_image(fill_color="black",
-                          back_color="white")
+    image = qr.make_image(
+        fill_color="black",
+        back_color="white"
+    )
 
     filename = f"{certificate_id}.png"
 

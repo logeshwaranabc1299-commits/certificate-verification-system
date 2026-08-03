@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Details</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="logo">
+        Certificate Verification
+    </div>
+</header>
+
+<div class="container">
+
+    <h2>Certificate Verified Successfully ✅</h2>
+
+    <table class="certificate-table">
+
+        <tr>
+            <th>Certificate ID</th>
+            <td>{{ certificate["certificate_id"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Student Name</th>
+            <td>{{ certificate["student_name"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Register Number</th>
+            <td>{{ certificate["register_number"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Course</th>
+            <td>{{ certificate["course"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Institution</th>
+            <td>{{ certificate["institution"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Issue Date</th>
+            <td>{{ certificate["issue_date"] }}</td>
+        </tr>
+
+        <tr>
+            <th>Status</th>
+            <td style="color:green;font-weight:bold;">
+                VERIFIED ✓
+            </td>
+        </tr>
+
+    </table>
+
+    <br>
+
+    <a href="/download/{{ certificate['certificate_id'] }}">
+        <button class="search-btn">
+            Download Certificate
+        </button>
+    </a>
+
+</div>
+
+</body>
+</html>

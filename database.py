@@ -38,6 +38,16 @@ def create_tables():
         )
         """
     )
+    cursor.execute(
+    """
+    CREATE TABLE IF NOT EXISTS admins (
+        admin_id INTEGER PRIMARY KEY AUTOINCREMENT,
+        college_name TEXT NOT NULL,
+        username TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL
+    )
+    """
+)
     cursor.execute("PRAGMA table_info(certificates)")
 
     existing_columns = {
@@ -59,6 +69,27 @@ def create_tables():
             ADD COLUMN revoked_at TEXT
             """
         )
+
+    cursor.execute("""
+INSERT OR IGNORE INTO admins
+(college_name, username, password)
+VALUES
+('KIOT','kiotadmin','kiot@12345')
+""")
+
+    cursor.execute("""
+INSERT OR IGNORE INTO admins
+(college_name, username, password)
+VALUES
+('PSG','psgadmin','psg@12345')
+""")
+
+    cursor.execute("""
+INSERT OR IGNORE INTO admins
+(college_name, username, password)
+VALUES
+('MIT','mitadmin','mit@12345')
+""")
 
     connection.commit()
     connection.close()
@@ -87,6 +118,7 @@ def get_previous_block_hash():
 
 
 def insert_certificate(
+    admin_id,
     certificate_id,
     student_name,
     register_number,
@@ -121,6 +153,7 @@ def insert_certificate(
     cursor.execute(
         """
         INSERT INTO certificates (
+            admin_id,
             certificate_id,
             student_name,
             register_number,
@@ -134,9 +167,10 @@ def insert_certificate(
             block_hash,
             created_at
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """,
         (
+            admin_id,
             certificate_id,
             student_name,
             register_number,
@@ -285,18 +319,34 @@ def search_certificates(search):
     connection.close()
 
     return certificates    
-def delete_certificate(certificate_id):
-
+def login_admin(username, password):
     connection = get_connection()
     cursor = connection.cursor()
 
-    cursor.execute(
-        """
-        DELETE FROM certificates
-        WHERE certificate_id = ?
-        """,
-        (certificate_id,)
-    )
+    cursor.execute("""
+        SELECT *
+        FROM admins
+        WHERE username=? AND password=?
+    """, (username, password))
 
-    connection.commit()
+    admin = cursor.fetchone()
+
     connection.close()
+
+    return admin  
+def get_admin_certificates(admin_id):
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT *
+        FROM certificates
+        WHERE admin_id = ?
+        ORDER BY id DESC
+    """, (admin_id,))
+
+    certificates = cursor.fetchall()
+
+    connection.close()
+
+    return certificates  

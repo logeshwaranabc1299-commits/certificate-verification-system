@@ -1,172 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
+    <title>Certificate Result</title>
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Verification Result</title>
-
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-<header class="navbar">
+<div class="container">
 
-    <div class="logo">
-        Verification Result
-    </div>
+{% if status=="valid" %}
 
-    <nav>
-        <a href="/">Home</a>
-        <a href="/verify">Verify Again</a>
-    </nav>
+<h2 style="color:green;">
+Certificate Verified Successfully ✅
+</h2>
 
-</header>
+<table class="certificate-table">
 
-<main class="result-section">
+<tr>
+<th>Certificate ID</th>
+<td>{{ certificate["certificate_id"] }}</td>
+</tr>
 
-    <div class="result-card {{ status }}">
+<tr>
+<th>Student Name</th>
+<td>{{ certificate["student_name"] }}</td>
+</tr>
 
-        {% if status == "valid" %}
+<tr>
+<th>Register Number</th>
+<td>{{ certificate["register_number"] }}</td>
+</tr>
 
-            <div class="result-symbol">✓</div>
-            <h1>Valid Certificate</h1>
+<tr>
+<th>Course</th>
+<td>{{ certificate["course"] }}</td>
+</tr>
 
-        {% elif status == "invalid" %}
+<tr>
+<th>Institution</th>
+<td>{{ certificate["institution"] }}</td>
+</tr>
 
-            <div class="result-symbol">✕</div>
-            <h1>Invalid Certificate</h1>
+<tr>
+<th>Issue Date</th>
+<td>{{ certificate["issue_date"] }}</td>
+</tr>
 
-        {% else %}
+<tr>
+<th>Status</th>
+<td style="color:green;">
+VALID ✅
+</td>
+</tr>
 
-            <div class="result-symbol">!</div>
-            <h1>Verification Error</h1>
+<tr>
+<th>QR Code</th>
+<td>
 
-        {% endif %}
+<img
+src="/qrcode/{{ certificate['qr_code'] }}"
+width="180"
+>
 
-        <p class="result-message">
-            {{ message }}
-        </p>
+</td>
+</tr>
 
-        {% if certificate %}
+</table>
 
-            <div class="certificate-details">
+<br>
 
-                <p>
-                    <strong>Certificate ID:</strong>
-                    {{ certificate["certificate_id"] }}
-                </p>
+<a href="/download/{{ certificate['certificate_id'] }}">
 
-                <p>
-                    <strong>Student Name:</strong>
-                    {{ certificate["student_name"] }}
-                </p>
+<button>
 
-                <p>
-                    <strong>Register Number:</strong>
-                    {{ certificate["register_number"] }}
-                </p>
+Download Certificate
 
-                <p>
-                    <strong>Course:</strong>
-                    {{ certificate["course"] }}
-                </p>
+</button>
 
-                <p>
-                    <strong>Institution:</strong>
-                    {{ certificate["institution"] }}
-                </p>
+</a>
 
-                <p>
-                    <strong>Issue Date:</strong>
-                    {{ certificate["issue_date"] }}
-                </p>
+{% else %}
 
-               <p>
-    <strong>Certificate Status:</strong>
+<h2 style="color:red;">
 
-    {% if certificate["status"] == "REVOKED" %}
+{{ message }}
 
-        <span class="status-revoked">
-            REVOKED
-        </span>
+</h2>
 
-    {% else %}
-
-        <span class="status-valid">
-            VALID
-        </span>
-
-    {% endif %}
-</p>
-
-<p>
-    <strong>Blockchain Status:</strong>
-    Authenticated
-</p>
-
-                {% if certificate["qr_code"] %}
-
-                    <hr class="qr-divider">
-
-                    <div class="qr-section">
-
-                        <h3>Certificate QR Code</h3>
-
-                        <img
-                            src="{{ url_for(
-                                'get_qrcode',
-                                filename=certificate['qr_code']
-                            ) }}"
-                            alt="Certificate QR Code"
-                            class="qr-image"
-                        >
-
-                        <p class="qr-note">
-                            Scan this QR code to open the certificate
-                            verification page.
-                        </p>
-
-                    </div>
-
-                {% endif %}
-
-            </div>
-
-        {% endif %}
-
-        <div class="button-group">
-
-    <a
-        href="{{ url_for(
-            'download_certificate',
-            certificate_id=certificate['certificate_id']
-        ) }}"
-        class="btn download-btn"
-    >
-        Download Certificate
-    </a>
-
-    <a
-        href="/verify"
-        class="btn primary-btn"
-    >
-        Verify Another Certificate
-    </a>
+{% endif %}
 
 </div>
-
-    </div>
-
-</main>
 
 </body>
 </html>

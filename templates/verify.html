@@ -1,88 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
     <title>Verify Certificate</title>
-
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}"
-    >
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
-<header class="navbar">
+<div class="container">
 
-    <div class="logo">
-        Certificate Verification
-    </div>
+    <h2>Verify Certificate</h2>
 
-    <nav>
-        <a href="/">Home</a>
-        <a href="/login">Admin Login</a>
-    </nav>
+    <form method="POST">
 
-</header>
+        <label>Certificate ID</label>
 
-<main class="form-section">
-
-    <div class="form-card">
-
-        <h1>Verify Certificate</h1>
-
-        <p>
-            Enter the certificate ID and upload the
-            original certificate file.
-        </p>
-
-        <form
-            method="POST"
-            enctype="multipart/form-data"
+        <input
+            type="text"
+            name="certificate_id"
+            placeholder="Enter Certificate ID"
+            required
         >
 
-            <label for="certificate_id">
-                Certificate ID
-            </label>
+        <br><br>
 
-            <input
-                type="text"
-                id="certificate_id"
-                name="certificate_id"
-                placeholder="Example: KIOT-MECH-2026-001"
-                required
-            >
+        <button type="submit">
+            Verify Certificate
+        </button>
 
-            <label for="certificate_file">
-                Upload Certificate
-            </label>
+    </form>
 
-            <input
-                type="file"
-                id="certificate_file"
-                name="certificate_file"
-                accept=".pdf,.png,.jpg,.jpeg"
-                required
-            >
-
-            <button
-                type="submit"
-                class="btn primary-btn full-width"
-            >
-                Verify Certificate
-            </button>
-
-        </form>
-
-    </div>
-
-</main>
+</div>
 
 </body>
 </html>
