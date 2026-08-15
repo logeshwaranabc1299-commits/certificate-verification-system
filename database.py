@@ -22,20 +22,23 @@ def create_tables():
     cursor.execute(
         """
         CREATE TABLE IF NOT EXISTS certificates (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            certificate_id TEXT UNIQUE NOT NULL,
-            student_name TEXT NOT NULL,
-            register_number TEXT NOT NULL,
-            course TEXT NOT NULL,
-            institution TEXT NOT NULL,
-            issue_date TEXT NOT NULL,
-            file_name TEXT NOT NULL,
-            qr_code TEXT NOT NULL,
-            certificate_hash TEXT NOT NULL,
-            previous_hash TEXT NOT NULL,
-            block_hash TEXT NOT NULL,
-            created_at TEXT NOT NULL
-        )
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    admin_id INTEGER,
+    certificate_id TEXT UNIQUE NOT NULL,
+    student_name TEXT NOT NULL,
+    register_number TEXT NOT NULL,
+    course TEXT NOT NULL,
+    institution TEXT NOT NULL,
+    issue_date TEXT NOT NULL,
+    file_name TEXT NOT NULL,
+    qr_code TEXT NOT NULL,
+    certificate_hash TEXT NOT NULL,
+    previous_hash TEXT NOT NULL,
+    block_hash TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'VALID',
+    revoked_at TEXT
+)
         """
     )
     cursor.execute(
