@@ -188,7 +188,7 @@ def upload_certificate():
                     certificate_id,
                     student_name,
                     register_number,
-                    course,
+                    course, 
                     institution,
                     issue_date,
                     stored_filename,
@@ -361,10 +361,6 @@ def download_certificate(certificate_id):
         as_attachment=True
     )
 
-@app.route("/logout")
-def logout():
-    session.pop("admin", None)
-    return redirect(url_for("home"))
 
 @app.route("/certificate/<certificate_id>")
 def certificate_details(certificate_id):
@@ -378,6 +374,11 @@ def certificate_details(certificate_id):
         "certificate_details.html",
         certificate=certificate
     )
+
+@app.route("/logout")
+def logout():
+    session.pop("admin", None)
+    return redirect(url_for("home"))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

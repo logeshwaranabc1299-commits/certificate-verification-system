@@ -1,76 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Certificate Details</title>
-
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-<header class="navbar">
-    <div class="logo">
-        Certificate Verification
-    </div>
-</header>
+    <h1>Certificate Verified</h1>
 
-<div class="container">
+    <p>
+        <strong>Certificate ID:</strong>
+        {{ certificate["certificate_id"] }}
+    </p>
 
-    <h2>Certificate Verified Successfully ✅</h2>
+    <p>
+        <strong>Student Name:</strong>
+        {{ certificate["student_name"] }}
+    </p>
 
-    <table class="certificate-table">
+    <p>
+        <strong>Register Number:</strong>
+        {{ certificate["register_number"] }}
+    </p>
 
-        <tr>
-            <th>Certificate ID</th>
-            <td>{{ certificate["certificate_id"] }}</td>
-        </tr>
+    <p>
+        <strong>Course:</strong>
+        {{ certificate["course"] }}
+    </p>
 
-        <tr>
-            <th>Student Name</th>
-            <td>{{ certificate["student_name"] }}</td>
-        </tr>
+    <p>
+        <strong>Institution:</strong>
+        {{ certificate["institution"] }}
+    </p>
 
-        <tr>
-            <th>Register Number</th>
-            <td>{{ certificate["register_number"] }}</td>
-        </tr>
-
-        <tr>
-            <th>Course</th>
-            <td>{{ certificate["course"] }}</td>
-        </tr>
-
-        <tr>
-            <th>Institution</th>
-            <td>{{ certificate["institution"] }}</td>
-        </tr>
-
-        <tr>
-            <th>Issue Date</th>
-            <td>{{ certificate["issue_date"] }}</td>
-        </tr>
-
-        <tr>
-            <th>Status</th>
-            <td style="color:green;font-weight:bold;">
-                VERIFIED ✓
-            </td>
-        </tr>
-
-    </table>
+    <p>
+        <strong>Issue Date:</strong>
+        {{ certificate["issue_date"] }}
+    </p>
 
     <br>
 
-    <a href="/download/{{ certificate['certificate_id'] }}">
-        <button class="search-btn">
-            Download Certificate
-        </button>
+    <a href="{{ url_for('download_certificate', certificate_id=certificate['certificate_id']) }}">
+        Download Certificate
     </a>
-
-</div>
 
 </body>
 </html>
