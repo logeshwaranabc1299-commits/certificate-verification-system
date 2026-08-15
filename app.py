@@ -264,15 +264,6 @@ def verify():
 
     return render_template("verify.html")
 
-    if not os.path.exists(file_path):
-        return "Certificate file not found", 404
-
-    return send_from_directory(
-        app.config["UPLOAD_FOLDER"],
-        certificate["file_name"],
-        as_attachment=True
-    )
-
 @app.route("/blockchain")
 def blockchain_records():
     if "admin" not in session:
@@ -374,6 +365,7 @@ def download_certificate(certificate_id):
 def logout():
     session.pop("admin", None)
     return redirect(url_for("home"))
+
 @app.route("/certificate/<certificate_id>")
 def certificate_details(certificate_id):
 
