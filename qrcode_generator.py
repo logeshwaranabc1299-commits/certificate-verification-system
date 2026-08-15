@@ -1,6 +1,7 @@
 import qrcode
 import os
 
+
 def generate_qr_code(certificate_id):
 
     os.makedirs("qrcodes", exist_ok=True)
@@ -11,10 +12,13 @@ def generate_qr_code(certificate_id):
         border=5
     )
 
-    verification_url = f"http://10.226.194.163:5000/certificate/{certificate_id}"
+    # PUBLIC RENDER URL
+    verification_url = (
+        f"https://blockchain-certificate-verification-dkt5.onrender.com"
+        f"/certificate/{certificate_id}"
+    )
 
     qr.add_data(verification_url)
-
     qr.make(fit=True)
 
     image = qr.make_image(
@@ -24,7 +28,10 @@ def generate_qr_code(certificate_id):
 
     filename = f"{certificate_id}.png"
 
-    save_path = os.path.join("qrcodes", filename)
+    save_path = os.path.join(
+        "qrcodes",
+        filename
+    )
 
     image.save(save_path)
 

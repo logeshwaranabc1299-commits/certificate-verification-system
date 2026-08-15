@@ -269,11 +269,20 @@ def certificate_details(certificate_id):
     certificate = get_certificate_by_id(certificate_id)
 
     if certificate is None:
-        return "Certificate not found"
+        return "Certificate not found", 404
 
-    return render_template(
-        "certificate_details.html",
-        certificate=certificate
+    file_path = os.path.join(
+        app.config["UPLOAD_FOLDER"],
+        certificate["file_name"]
+    )
+
+    if not os.path.exists(file_path):
+        return "Certificate file not found", 404
+
+    return send_from_directory(
+        app.config["UPLOAD_FOLDER"],
+        certificate["file_name"],
+        as_attachment=True
     )
 
 @app.route("/blockchain")
