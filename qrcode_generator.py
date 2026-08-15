@@ -12,7 +12,6 @@ def generate_qr_code(certificate_id):
         border=5
     )
 
-    # PUBLIC RENDER URL
     verification_url = (
         f"https://blockchain-certificate-verification-dkt5.onrender.com"
         f"/certificate/{certificate_id}"
