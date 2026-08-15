@@ -263,18 +263,6 @@ def verify():
         )
 
     return render_template("verify.html")
-@app.route("/certificate/<certificate_id>")
-def certificate_details(certificate_id):
-
-    certificate = get_certificate_by_id(certificate_id)
-
-    if certificate is None:
-        return "Certificate not found", 404
-
-    file_path = os.path.join(
-        app.config["UPLOAD_FOLDER"],
-        certificate["file_name"]
-    )
 
     if not os.path.exists(file_path):
         return "Certificate file not found", 404
@@ -386,7 +374,18 @@ def download_certificate(certificate_id):
 def logout():
     session.pop("admin", None)
     return redirect(url_for("home"))
+@app.route("/certificate/<certificate_id>")
+def certificate_details(certificate_id):
 
+    certificate = get_certificate_by_id(certificate_id)
+
+    if certificate is None:
+        return "Certificate not found", 404
+
+    return render_template(
+        "certificate_details.html",
+        certificate=certificate
+    )
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
