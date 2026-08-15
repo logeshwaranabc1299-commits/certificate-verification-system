@@ -13,9 +13,10 @@ def generate_qr_code(certificate_id):
     )
 
     verification_url = (
-        f"https://blockchain-certificate-verification-dkt5.onrender.com"
-        f"/certificate/{certificate_id}"
-    )
+    f"https://certificate-verification-system-1i3al.onrender.com"
+    f"/certificate/{certificate_id}"
+)
+    
 
     qr.add_data(verification_url)
     qr.make(fit=True)
