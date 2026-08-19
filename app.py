@@ -320,7 +320,10 @@ def delete_certificate_record(certificate_id):
     if "admin" not in session:
         return redirect(url_for("login"))
 
-    certificate = get_certificate_by_id(certificate_id)
+    certificate = get_certificate_by_id(
+        session["admin_id"],
+        certificate_id
+    )
 
     if certificate:
 
@@ -354,13 +357,16 @@ def get_qrcode(filename):
         app.config["QRCODE_FOLDER"],
         filename
     )
-@app.route("/download/<certificate_id>")
-def download_certificate(certificate_id):
+@app.route("/download/<int:admin_id>/<certificate_id>")
+def download_certificate(admin_id, certificate_id):
 
-    certificate = get_certificate_by_id(certificate_id)
+    certificate = get_certificate_by_id(
+        admin_id,
+        certificate_id
+    )
 
     if certificate is None:
-        return "Certificate not found"
+        return "Certificate not found", 404
 
     return send_from_directory(
         app.config["UPLOAD_FOLDER"],

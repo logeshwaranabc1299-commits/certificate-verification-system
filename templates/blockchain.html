@@ -60,12 +60,8 @@ Blockchain Integrity Failed
 {% for certificate in certificates %}
 
 <div class="block-card">
-
-<h2>
-
-Block #{{ certificate["id"] }}
-
-</h2>
+    
+<h2>Block #{{ loop.index }}</h2>
 
 <p>
 

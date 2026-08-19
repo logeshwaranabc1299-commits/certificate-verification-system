@@ -85,7 +85,7 @@
 
                 <tr>
 
-                    <td>{{ certificate["display_id"] }}</td>
+                    <td>{{ loop.index }}</td>
 
                     <td>{{ certificate["certificate_id"] }}</td>
 
@@ -99,19 +99,17 @@
 
                     <td>
 
-                        <a
-                            href="/download/{{ certificate['certificate_id'] }}"
-                            class="download-btn"
-                        >
-                            Download
-                        </a>
-
+                        <a href="{{ url_for('download_certificate',
+                    admin_id=certificate['admin_id'],
+                    certificate_id=certificate['certificate_id']) }}">
+    Download Certificate
+</a>
                     </td>
 
                     <td>
 
                         <form
-                            action="/delete/{{ certificate['certificate_id'] }}"
+                            action="{{ url_for('delete_certificate_record', certificate_id=certificate['certificate_id']) }}"
                             method="POST"
                             onsubmit="return confirm('Are you sure you want to delete this certificate?');"
                         >
