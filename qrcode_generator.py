@@ -2,7 +2,7 @@ import qrcode
 import os
 
 
-def generate_qr_code(certificate_id):
+def generate_qr_code(admin_id, certificate_id):
 
     os.makedirs("qrcodes", exist_ok=True)
 
@@ -14,7 +14,7 @@ def generate_qr_code(certificate_id):
 
     verification_url = (
     f"https://certificate-verification-system-1-i3al.onrender.com"
-    f"/certificate/{certificate_id}"
+    f"/certificate/{admin_id}/{certificate_id}"
 )
     
 
@@ -26,7 +26,7 @@ def generate_qr_code(certificate_id):
         back_color="white"
     )
 
-    filename = f"{certificate_id}.png"
+    filename = f"{admin_id}_{certificate_id}.png"
 
     save_path = os.path.join(
         "qrcodes",

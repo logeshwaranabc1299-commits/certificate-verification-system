@@ -180,8 +180,10 @@ def upload_certificate():
                 )
 
                 qr_filename = generate_qr_code(
-                    certificate_id
-                )
+    session["admin_id"],
+    certificate_id
+)
+                
 
                 insert_certificate(
                     session["admin_id"],
@@ -246,7 +248,10 @@ def verify():
             "certificate_id", ""
         ).strip()
 
-        certificate = get_certificate_by_id(certificate_id)
+        certificate = get_certificate_by_id(
+    session["admin_id"],
+    certificate_id
+)
 
         if certificate is None:
 
@@ -266,11 +271,15 @@ def verify():
 
 @app.route("/blockchain")
 def blockchain_records():
+
     if "admin" not in session:
         return redirect(url_for("login"))
 
-    certificates = get_all_certificates()
-    chain_valid = verify_blockchain_integrity()
+    admin_id = session["admin_id"]
+
+    certificates = get_admin_certificates(admin_id)
+
+    chain_valid = verify_blockchain_integrity(admin_id)
 
     return render_template(
         "blockchain.html",
@@ -280,33 +289,31 @@ def blockchain_records():
 
 
 @app.route("/certificates")
-
 def certificate_list():
 
     if "admin" not in session:
-
         return redirect(url_for("login"))
 
-    search=request.args.get("search","")
+    search = request.args.get("search", "").strip()
 
     if search:
 
-        certificates=search_certificates(search)
+        certificates = search_certificates(
+            search,
+            session["admin_id"]
+        )
 
     else:
 
-        certificates = get_admin_certificates(session["admin_id"])
+        certificates = get_admin_certificates(
+            session["admin_id"]
+        )
+
     return render_template(
-
-    "certificates.html",
-
-    certificates=certificates,
-
-    search=search
-
+        "certificates.html",
+        certificates=certificates,
+        search=search
     )
-
-
 @app.route("/delete/<certificate_id>", methods=["POST"])
 def delete_certificate_record(certificate_id):
 
@@ -362,10 +369,13 @@ def download_certificate(certificate_id):
     )
 
 
-@app.route("/certificate/<certificate_id>")
-def certificate_details(certificate_id):
+@app.route("/certificate/<int:admin_id>/<certificate_id>")
+def certificate_details(admin_id, certificate_id):
 
-    certificate = get_certificate_by_id(certificate_id)
+    certificate = get_certificate_by_id(
+        admin_id,
+        certificate_id
+    )
 
     if certificate is None:
         return "Certificate not found", 404

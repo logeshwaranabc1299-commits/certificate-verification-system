@@ -24,7 +24,7 @@ def create_tables():
         CREATE TABLE IF NOT EXISTS certificates (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     admin_id INTEGER,
-    certificate_id TEXT UNIQUE NOT NULL,
+    certificate_id TEXT NOT NULL,
     student_name TEXT NOT NULL,
     register_number TEXT NOT NULL,
     course TEXT NOT NULL,
@@ -72,6 +72,11 @@ def create_tables():
             ADD COLUMN revoked_at TEXT
             """
         )
+    cursor.execute("""
+    CREATE UNIQUE INDEX IF NOT EXISTS
+    idx_admin_certificate_id
+    ON certificates(admin_id, certificate_id)
+""")    
 
     cursor.execute("""
 INSERT OR IGNORE INTO admins
@@ -98,7 +103,7 @@ VALUES
     connection.close()
 
 
-def get_previous_block_hash():
+def get_previous_block_hash(admin_id):
     connection = get_connection()
     cursor = connection.cursor()
 
@@ -106,9 +111,11 @@ def get_previous_block_hash():
         """
         SELECT block_hash
         FROM certificates
+        WHERE admin_id = ?
         ORDER BY id DESC
         LIMIT 1
-        """
+        """,
+        (admin_id,)
     )
 
     record = cursor.fetchone()
@@ -132,7 +139,7 @@ def insert_certificate(
     qr_code,
     certificate_hash
 ):
-    previous_hash = get_previous_block_hash()
+    previous_hash = get_previous_block_hash(admin_id)
 
     timestamp = datetime.now().strftime(
         "%Y-%m-%d %H:%M:%S"
@@ -193,7 +200,8 @@ def insert_certificate(
     connection.close()
 
 
-def get_certificate_by_id(certificate_id):
+def get_certificate_by_id(admin_id, certificate_id):
+
     connection = get_connection()
     cursor = connection.cursor()
 
@@ -201,10 +209,17 @@ def get_certificate_by_id(certificate_id):
         """
         SELECT *
         FROM certificates
-        WHERE certificate_id = ?
+        WHERE admin_id = ?
+        AND certificate_id = ?
         """,
-        (certificate_id,)
+        (admin_id, certificate_id)
     )
+
+    certificate = cursor.fetchone()
+
+    connection.close()
+
+    return certificate
 
     certificate = cursor.fetchone()
     connection.close()
@@ -230,12 +245,29 @@ def get_all_certificates():
     return certificates
 
 
-def verify_blockchain_integrity():
-    certificates = get_all_certificates()
+def verify_blockchain_integrity(admin_id):
+
+    connection = get_connection()
+    cursor = connection.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM certificates
+        WHERE admin_id = ?
+        ORDER BY id ASC
+        """,
+        (admin_id,)
+    )
+
+    certificates = cursor.fetchall()
+
+    connection.close()
 
     previous_hash = "0"
 
     for certificate in certificates:
+
         recalculated_hash = generate_block_hash(
             certificate["certificate_id"],
             certificate["student_name"],
@@ -273,55 +305,39 @@ def delete_certificate(certificate_id):
 
     connection.commit()
     connection.close()
-def search_certificates(search):
 
-    connection=get_connection()
+def search_certificates(search, admin_id):
 
-    cursor=connection.cursor()
+    connection = get_connection()
+    cursor = connection.cursor()
 
-    keyword=f"%{search}%"
+    keyword = f"%{search}%"
 
     cursor.execute(
-
-    """
-
-    SELECT *
-
-    FROM certificates
-
-    WHERE
-
-    certificate_id LIKE ?
-
-    OR
-
-    student_name LIKE ?
-
-    OR
-
-    register_number LIKE ?
-
-    ORDER BY id
-
-    """,
-
-    (
-
-    keyword,
-
-    keyword,
-
-    keyword
-
+        """
+        SELECT *
+        FROM certificates
+        WHERE admin_id = ?
+        AND (
+            certificate_id LIKE ?
+            OR student_name LIKE ?
+            OR register_number LIKE ?
+        )
+        ORDER BY id
+        """,
+        (
+            admin_id,
+            keyword,
+            keyword,
+            keyword
+        )
     )
 
-    )
-
-    certificates=cursor.fetchall()
+    certificates = cursor.fetchall()
 
     connection.close()
 
-    return certificates    
+    return certificates
 def login_admin(username, password):
     connection = get_connection()
     cursor = connection.cursor()
@@ -336,20 +352,24 @@ def login_admin(username, password):
 
     connection.close()
 
-    return admin  
+    return admin
 def get_admin_certificates(admin_id):
     connection = get_connection()
     cursor = connection.cursor()
 
     cursor.execute("""
-        SELECT *
+        SELECT *,
+               ROW_NUMBER() OVER (
+                   PARTITION BY admin_id
+                   ORDER BY id ASC
+               ) AS display_id
         FROM certificates
         WHERE admin_id = ?
-        ORDER BY id DESC
+        ORDER BY id ASC
     """, (admin_id,))
 
     certificates = cursor.fetchall()
 
     connection.close()
 
-    return certificates  
+    return certificates
