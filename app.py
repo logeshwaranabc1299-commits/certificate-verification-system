@@ -373,10 +373,12 @@ def download_certificate(admin_id, certificate_id):
         certificate["file_name"],
         as_attachment=True
     )
-
-
 @app.route("/certificate/<int:admin_id>/<certificate_id>")
 def certificate_details(admin_id, certificate_id):
+
+    print("QR REQUEST")
+    print("Admin ID:", admin_id)
+    print("Certificate ID:", certificate_id)
 
     certificate = get_certificate_by_id(
         admin_id,
@@ -384,13 +386,15 @@ def certificate_details(admin_id, certificate_id):
     )
 
     if certificate is None:
+        print("CERTIFICATE NOT FOUND")
         return "Certificate not found", 404
+
+    print("CERTIFICATE FOUND:", certificate["certificate_id"])
 
     return render_template(
         "certificate_details.html",
         certificate=certificate
     )
-
 @app.route("/logout")
 def logout():
     session.pop("admin", None)

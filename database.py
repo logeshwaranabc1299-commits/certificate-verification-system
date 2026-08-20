@@ -221,11 +221,6 @@ def get_certificate_by_id(admin_id, certificate_id):
 
     return certificate
 
-    certificate = cursor.fetchone()
-    connection.close()
-
-    return certificate
-
 
 def get_all_certificates():
     connection = get_connection()
