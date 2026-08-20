@@ -373,9 +373,12 @@ def download_certificate(admin_id, certificate_id):
         certificate["file_name"],
         as_attachment=True
     )
+
+
 @app.route("/certificate/<int:admin_id>/<certificate_id>")
 def certificate_details(admin_id, certificate_id):
 
+    print("===================================")
     print("QR REQUEST")
     print("Admin ID:", admin_id)
     print("Certificate ID:", certificate_id)
@@ -393,7 +396,8 @@ def certificate_details(admin_id, certificate_id):
 
     return render_template(
         "certificate_details.html",
-        certificate=certificate
+        certificate=certificate,
+        admin_id=admin_id
     )
 @app.route("/logout")
 def logout():

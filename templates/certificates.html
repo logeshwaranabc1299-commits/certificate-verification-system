@@ -73,7 +73,6 @@
                     <th>Register Number</th>
                     <th>Course</th>
                     <th>Issue Date</th>
-                    <th>QR Code</th>
                     <th>Download</th>
                     <th>Action</th>
                 </tr>
@@ -114,29 +113,6 @@
                     <!-- Issue Date -->
                     <td>
                         {{ certificate["issue_date"] }}
-                    </td>
-
-                    <!-- QR Code -->
-                    <td>
-
-                        {% if certificate["qr_code"] %}
-
-                        <img
-                            src="{{ url_for(
-                                'get_qrcode',
-                                filename=certificate['qr_code']
-                            ) }}"
-                            alt="QR Code"
-                            width="80"
-                            height="80"
-                        >
-
-                        {% else %}
-
-                        <span>No QR</span>
-
-                        {% endif %}
-
                     </td>
 
                     <!-- Download -->

@@ -40,7 +40,11 @@
 
     <br>
 
-    <a href="{{ url_for('download_certificate', certificate_id=certificate['certificate_id']) }}">
+    <a href="{{ url_for(
+        'download_certificate',
+        admin_id=admin_id,
+        certificate_id=certificate['certificate_id']
+    ) }}">
         Download Certificate
     </a>
 
